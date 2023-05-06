@@ -1,6 +1,6 @@
 from Interests.Interest import InterestInput
 from decimal import Decimal
-from datetime import date, time
+from datetime import date, datetime
 
 
 class InterestIterator:
@@ -22,31 +22,29 @@ class InterestIterator:
         self.__max_return = max_return
         self.__rate = rate
         self.__dates = dates
-
-        self.__pointer = 0
+        self.__pointer = next(iter(self.__withdraw.keys()))
 
     def __next__(self) -> InterestInput:
-        try:
+        if self.__pointer not in self.__withdraw:
+            self.__pointer = next(iter(self.__withdraw.keys()))
+            raise StopIteration
 
-            k = next(k for k in self.__withdraw.keys() if k > self.__pointer)
+        res = InterestInput(self.__pointer,
+                            self.__dates[self.__pointer],
+                            self.__dates[self.__pointer + 1 if self.__pointer + 1 in self.__dates else self.__pointer],
+                            self.__withdraw[self.__pointer],
+                            self.__max_return[self.__pointer],
+                            self.__rate)
+        self.__pointer += 1
 
-        except StopIteration:
-            self.__pointer = 0
-            raise
-        self.__pointer = k
-        return InterestInput(k,
-                             self.__dates[k],
-                             self.__dates[k + 1 if k + 1 in self.__dates else k],
-                             self.__withdraw[k],
-                             self.__max_return[k],
-                             self.__rate)
+        return res
 
     def __iter__(self):
         return self
 
 
 if __name__ == '__main__':
-
+    t1 = datetime.now().microsecond
     deposit = {
         3: Decimal(100),
         4: Decimal(0),
@@ -76,3 +74,5 @@ if __name__ == '__main__':
 
     for row in interest_iter:
         print(row)
+
+    print((datetime.now().microsecond - t1))
