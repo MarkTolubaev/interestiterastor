@@ -41,36 +41,6 @@ class InterestInput:
         return f"{self.period:<8}" \
                f"{self.date1.strftime('%Y-%m-%d'):12}" \
                f"{self.date2.strftime('%Y-%m-%d'):12}" \
-               f"{self.withdraw:<14.2f}" \
+               f"{self.withdraw:<8.2f}" \
                f"{self.max_return:<14.2f}" \
-               f"{self.rate:<5.2f}\n{'-'*65}"
-
-
-if __name__ == '__main__':
-    headers = ('period', 'date1', 'date2', 'deposit', 'max_withdraw', 'rate')
-    header_string = f"{headers[0]:<8}" \
-                    f"{headers[1]:12}" \
-                    f"{headers[2]:12}" \
-                    f"{headers[3]:<14}" \
-                    f"{headers[4]:<14}" \
-                    f"{headers[5]:<5}" \
-                    f"\n{'-'*65}"
-
-    obj1 = InterestInput(1, date(2023, 5, 6), date(2023, 5, 7), Decimal(100), Decimal(40), Decimal(0.1))
-    obj2 = InterestInput(2, date(2023, 5, 7), date(2023, 5, 8), Decimal(0), Decimal(40), Decimal(0.1))
-    obj3 = InterestInput(3, date(2023, 5, 8), date(2023, 5, 9), Decimal(0), Decimal(40), Decimal(0.1))
-
-    print(header_string)
-    print(obj1)
-    print(obj2)
-    print(obj3)
-
-    try:
-        del obj2.period
-    except AttributeError as e:
-        print(e)
-
-    try:
-        obj2.period = 10
-    except AttributeError as e:
-        print(e)
+               f"{self.rate:<10.2f}"
